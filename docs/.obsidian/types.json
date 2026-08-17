@@ -1,0 +1,11 @@
+{
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "features": "multitext",
+    "teams": "multitext",
+    "status": "text",
+    "priority": "number"
+  }
+}

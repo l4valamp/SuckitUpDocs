@@ -4,4 +4,9 @@ nav:
   - Home: index.md
   - "AllPages/*/"
 
-ignore: "*Excalidraw/"
+ignore:
+  - "*Excalidraw/"
+  - "*Templates/"
+
+sort:
+  by: title

@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: mkdocs-entity-plugin
+Version: 0.1.0
+Summary: An MkDocs plugin for entity references
+Requires-Python: >=3.10
+Requires-Dist: mkdocs
