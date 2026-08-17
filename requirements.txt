@@ -33,3 +33,4 @@ urllib3==2.7.0
 watchdog==6.0.0
 wcmatch==11.0
 ./plugins/entity-plugin
+mkdocs-awesome-nav
