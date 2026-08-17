@@ -19,7 +19,6 @@ theme:
 
 plugins:
   - search
-
   - awesome-nav
   - roamlinks #this too
   - entity #this is our custom plugin for variables
