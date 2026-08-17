@@ -1,0 +1,7 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+nav:
+  - Home: index.md
+  - "AllPages/*/"
+
+ignore: "*Excalidraw/"

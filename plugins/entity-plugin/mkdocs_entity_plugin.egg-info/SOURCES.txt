@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+mkdocs_entity_plugin/__init__.py
+mkdocs_entity_plugin/extension.py
+mkdocs_entity_plugin/plugin.py
+mkdocs_entity_plugin.egg-info/PKG-INFO
+mkdocs_entity_plugin.egg-info/SOURCES.txt
+mkdocs_entity_plugin.egg-info/dependency_links.txt
+mkdocs_entity_plugin.egg-info/entry_points.txt
+mkdocs_entity_plugin.egg-info/requires.txt
+mkdocs_entity_plugin.egg-info/top_level.txt

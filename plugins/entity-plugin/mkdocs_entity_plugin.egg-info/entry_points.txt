@@ -1,0 +1,2 @@
+[mkdocs.plugins]
+entity = mkdocs_entity_plugin.plugin:EntityPlugin
