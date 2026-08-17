@@ -1,9 +1,10 @@
-name: Deploy Documentation
+name: Deploy MkDocs
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -13,18 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v6
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: 3.x
+          python-version: "3.x"
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+      - name: Install Material for MkDocs
+        run: pip install mkdocs-material
 
-      - name: Build and deploy
-        run: |
-          mkdocs gh-deploy --force
+      - name: Deploy to gh-pages
+        run: mkdocs gh-deploy --force
