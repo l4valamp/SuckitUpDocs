@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AllPages/Design/Design-Landing.md",
+                "file": "index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Design-Landing"
+              "title": "index"
             }
           }
         ]
@@ -191,21 +191,21 @@
   },
   "active": "66ea71126b7fedb0",
   "lastOpenFiles": [
+    "AllPages/Design/Design Landing.md",
+    "index.md",
+    "AllPages/Art/Art Landing.md",
+    "AllPages/Tech/Tech Landing.md",
     "AllPages/Design/Design-Landing (relay conflict 2026-08-17T16-05-47-217Z).md",
     "AllPages/Untitled.md",
     "nav.yml",
     "AllPages/Untitled (relay deleted 2026-08-17T15-22-59-005Z).md",
-    "index.md",
     "AllPages/Excalidraw/Drawing 2026-08-13 02.32.06.excalidraw (relay conflict 2026-08-13T06-55-28-797Z).md",
     "AllPages/rocks.md",
     "AllPages/Hi Hunter!! (relay deleted 2026-08-17T15-13-36-217Z).md",
     "AllPages/DEAR GOD.md",
-    "AllPages/Tech/Tech Landing.md",
     "AllPages/Tech",
     "AllPages/Excalidraw/Drawing 2026-08-13 03.01.56.excalidraw (relay conflict 2026-08-17T14-55-46-674Z).md",
-    "AllPages/Design/Design-Landing.md",
     "AllPages/Excalidraw",
-    "AllPages/Art/Art-Landing.md",
     "AllPages/Design",
     "AllPages/Art",
     "AllPages/Tech/Extra-Note.md",
