@@ -1,0 +1,80 @@
+filters:
+  and:
+    - file.tags.contains("task")
+    - '!file.name.contains("Template")'
+formulas:
+  Priority: link(status).asFile().properties.priority.tostring()
+  Status Priority Number: link(status).asFile().properties.priority
+  Feature Priority: link(formula.FirstFeature[0]).asFile().name.toString() + " |  " +  link(formula.FirstFeature[0]).asFile().properties.status.asFile().name.toString()
+  FirstFeature: |+
+    features.map(value.asFile().properties.priority + " | "  + value)
+      .sort()
+      .map(value.split(" | ")[1])
+
+  SortFeaturesByPriority: |-
+    features.map(value.asFile().properties.priority + " | "  + value)
+      .sort()
+      .map(value.split(" | ")[1])
+  auto-status: ""
+properties:
+  formula.Priority:
+    displayName: Status Priority
+  formula.FirstFeature:
+    displayName: SortedFeatures
+  formula.Feature Priority:
+    displayName: HighestPriorityFeature
+views:
+  - type: table
+    name: Default
+    order:
+      - file.name
+      - needs
+      - tags
+      - teams
+      - formula.auto-status
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Sprint
+    filters:
+      and:
+        - or:
+            - and:
+                - sprint.contains(this)
+                - this.tags.contains("#sprint")
+            - and:
+                - teams.contains(this)
+                - this.tags.contains("#teampage")
+    groupBy:
+      property: teams
+      direction: ASC
+    order:
+      - file.name
+      - sprint
+      - needs
+      - teams
+      - story points
+      - status
+    sort:
+      - property: sprint
+        direction: DESC
+      - property: story points
+        direction: ASC
+    columnSize:
+      file.name: 149
+      note.sprint: 110
+      note.needs: 244
+      note.teams: 99
+      note.story points: 31
+  - type: table
+    name: Needs
+    filters:
+      and:
+        - needs.contains(this)
+    order:
+      - file.name
+      - status
+    sort:
+      - property: file.name
+        direction: ASC
