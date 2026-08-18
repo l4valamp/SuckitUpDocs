@@ -1,0 +1,19 @@
+{
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "features": "multitext",
+    "teams": "multitext",
+    "status": "text",
+    "priority": "text",
+    "needs": "multitext",
+    "sprint": "multitext",
+    "start": "date",
+    "end": "date",
+    "storypoints": "number",
+    "story points": "number",
+    "done": "checkbox",
+    "PriorityVal": "number"
+  }
+}

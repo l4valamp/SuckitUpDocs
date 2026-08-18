@@ -1,0 +1,56 @@
+filters:
+  and:
+    - file.tags.contains("needs")
+formulas:
+  Priority: link(status).asFile().properties.priority.tostring()
+  Status Priority Number: link(status).asFile().properties.priority
+  Feature Priority: link(link(status).asFile().properties.status).asFile().properties.priority.tostring()
+properties:
+  formula.Priority:
+    displayName: Status Priority
+views:
+  - type: table
+    name: Systems
+    filters:
+      and:
+        - or:
+            - and:
+                - this.hasTag("feature")
+                - features.contains(this)
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Needs
+    filters:
+      and:
+        - file.tags.contains("needs")
+        - or:
+            - features.contains(this)
+            - this.inFolder("AllPages/Templates/Bases")
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: TeamPage
+    filters:
+      and:
+        - and:
+            - or:
+                - this.tags.contains(teampage)
+                - teams.contains(this)
+    groupBy:
+      property: features
+      direction: DESC
+    order:
+      - file.name
+      - teams
+      - features
+      - status
+      - formula.Priority
+      - formula.Feature Priority
+    sort:
+      - property: formula.Status Priority Number
+        direction: DESC
+    columnSize:
+      formula.Priority: 94

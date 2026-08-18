@@ -15,6 +15,21 @@ formulas:
     features.map(value.asFile().properties.priority + " | "  + value)
       .sort()
       .map(value.split(" | ")[1])
+  GetTopParentFeature: |
+    " ".repeat(20).split("").reduce(
+        if(
+            acc[0].asFile().properties.features.isEmpty(),
+            acc,
+            [
+                acc[0].asFile().properties.features[0],
+                acc[1] + " => " + acc[0].asFile().properties.features[0].asFile().name.toString()
+            ]
+        ),
+        [
+            link(formula.FirstFeature[0]),
+            link(formula.FirstFeature[0]).asFile().name.toString()
+        ]
+    )[0].asFile().name
 properties:
   formula.Priority:
     displayName: Status Priority
@@ -70,3 +85,20 @@ views:
       - teams
       - status
       - features
+  - type: table
+    name: Categories
+    filters:
+      or:
+        - and:
+            - categories.contains(this)
+            - this.tags.contains("#category")
+    groupBy:
+      property: formula.GetTopParentFeature
+      direction: ASC
+    order:
+      - file.name
+      - categories
+      - formula.GetTopParentFeature
+    sort:
+      - property: formula.GetTopParentFeature
+        direction: ASC

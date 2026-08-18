@@ -2,6 +2,8 @@
 
 site_name: Suck It Up Documentation
 site_url: https://l4valamp.github.io/suckitup-docs/
+docs_dir: .mkdocs_docs
+
 
 theme:
   name: material
@@ -20,6 +22,7 @@ theme:
 plugins:
   - search
   - awesome-nav # this should be good
+  - databaseview
   - roamlinks #this too
   - entity #this is our custom plugin for variables
 

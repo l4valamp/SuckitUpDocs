@@ -1,0 +1,2 @@
+[mkdocs.plugins]
+databaseview = mkdocs_databaseview_plugin.plugin:DBViewPlugin

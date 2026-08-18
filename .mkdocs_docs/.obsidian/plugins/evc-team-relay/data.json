@@ -1,0 +1,58 @@
+{
+  "sharedFolders": [
+    {
+      "path": "Suck It Up",
+      "guid": "4f6eab50-ad90-49ee-8e89-31f83721a848",
+      "relay": "relay-onprem",
+      "sync": {
+        "images": true,
+        "audio": true,
+        "videos": true,
+        "pdfs": true,
+        "otherTypes": true
+      },
+      "onpremServerId": "mettleworks-relay",
+      "connect": true
+    }
+  ],
+  "endpoints": {},
+  "relayOnPrem": {
+    "enabled": true,
+    "servers": [
+      {
+        "id": "evc-team-relay",
+        "name": "EVC Team Relay",
+        "controlPlaneUrl": "https://cp.tr.entire.vc",
+        "isValidated": false
+      },
+      {
+        "id": "mettleworks-relay",
+        "name": "MettleWorks Team Relay",
+        "controlPlaneUrl": "https://cp.relay.mettleworksstudio.com",
+        "relayServerUrl": "wss://relay.mettleworksstudio.com/doc/ws",
+        "isValidated": true,
+        "lastValidated": 1786608472675,
+        "lastUserEmail": "gthoma23@student.scad.edu"
+      }
+    ],
+    "defaultServerId": "mettleworks-relay"
+  },
+  "enableDocumentStatus": false,
+  "enableNewLinkFormat": false,
+  "enableDeltaLogging": false,
+  "enableDocumentHistory": false,
+  "enableEditorTweens": false,
+  "enableNetworkLogging": false,
+  "enableCanvasSync": false,
+  "enableVerifyUploads": false,
+  "enableAutomaticDiffResolution": true,
+  "enableDiscordLogin": false,
+  "enableSelfManageHosts": true,
+  "enableToasts": true,
+  "enablePresenceAvatars": true,
+  "enableLiveEmbeds": true,
+  "enablePreviewViewHooks": true,
+  "enableMetadataViewHooks": true,
+  "enableKanbanView": true,
+  "debugging": false
+}

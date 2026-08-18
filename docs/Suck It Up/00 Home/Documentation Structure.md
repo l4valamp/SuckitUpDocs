@@ -26,3 +26,17 @@
 
 - TO-DO:
 - Needs on team pages
+
+
+``` mermaid
+flowchart TD
+  A[Categories] --> |Display all features tagged with this category| B[Features];
+  B --> C[Sub-Features];
+  C --> D[Needs];
+  B --> D;
+  E[Tasks] -->|Each task contains one or several Needs. If a need has been assigned to a task, it will inherit that Task's completion status.| D;
+  F[Sprints] --> |Sprints are a collection of Tasks| E;
+```
+
+TODO:
+If tasks are complete, move them to the bottom or remove them from the page

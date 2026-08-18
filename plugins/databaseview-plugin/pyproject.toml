@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mkdocs-databaseview-plugin"
+version = "0.2.0"
+description = "MkDocs plugin for rendering Obsidian Bases as static Markdown tables"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "mkdocs>=1.5",
+    "PyYAML>=6.0",
+]
+
+[project.entry-points."mkdocs.plugins"]
+databaseview = "mkdocs_databaseview_plugin.plugin:DBViewPlugin"
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
