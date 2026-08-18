@@ -1,9 +1,0 @@
----
-tags:
-  - teampage
----
-# Team Page Template Title
-
-
-## Active Needs
-![[Needs.base#TeamPage]]

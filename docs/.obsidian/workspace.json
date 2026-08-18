@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AllPages/Team Pages/Art.md",
+                "file": "Suck It Up/00 Home/Team Pages/Art.md",
                 "mode": "source",
                 "source": false
               },
@@ -27,7 +27,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AllPages/Templates/Team Page Template.md",
+                "file": "Suck It Up/Templates/Team Page Template.md",
                 "mode": "source",
                 "source": false
               },
@@ -41,7 +41,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AllPages/Templates/Task Template.md",
+                "file": "Suck It Up/Templates/Task Template.md",
                 "mode": "source",
                 "source": false
               },
@@ -55,7 +55,7 @@
             "state": {
               "type": "bases",
               "state": {
-                "file": "AllPages/Templates/Bases/Tasks.base",
+                "file": "Suck It Up/Templates/Bases/Tasks.base",
                 "viewName": "Systems"
               },
               "icon": "lucide-table",
@@ -68,7 +68,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AllPages/Team Pages/Tech.md",
+                "file": "Suck It Up/00 Home/Team Pages/Tech.md",
                 "mode": "source",
                 "source": false
               },
@@ -77,12 +77,26 @@
             }
           },
           {
+            "id": "c2599b3245b27f81",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Suck It Up/Templates/Need Template.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Need Template"
+            }
+          },
+          {
             "id": "7dc831b179d2a470",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AllPages/Agile/Sprints/CurrentSprint.md",
+                "file": "Suck It Up/Agile/Sprints/CurrentSprint.md",
                 "mode": "source",
                 "source": false
               },
@@ -96,7 +110,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AllPages/PagesFromTemplates/Needs/Cool Other Thing.md",
+                "file": "Suck It Up/PagesFromTemplates/Needs/Cool Other Thing.md",
                 "mode": "source",
                 "source": false
               },
@@ -105,7 +119,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -273,43 +287,43 @@
       "evc-team-relay:Relay settings": false
     }
   },
-  "active": "63433a52a9982ae2",
+  "active": "c2599b3245b27f81",
   "lastOpenFiles": [
-    "Untitled.md",
-    "AllPages/Team Pages/Tech.md",
-    "AllPages/Agile/Sprints/Sprint 1.md",
-    "AllPages/Templates/Bases/Tasks.base",
-    "AllPages/Templates/Bases/Needs.base",
-    "AllPages/Agile/Sprints/CurrentSprint.md",
-    "AllPages/snippets",
-    "AllPages/Templates/Feature Template.md",
-    "AllPages/Templates/Needs Template.md",
-    "AllPages/PagesFromTemplates/Statuses/Not Started.md",
-    "AllPages/PagesFromTemplates/Statuses/Needs Revision.md",
-    "AllPages/PagesFromTemplates/Statuses/In Progress.md",
-    "AllPages/PagesFromTemplates/Statuses/COMPLETE.md",
-    "AllPages/PagesFromTemplates/Priorities/High Priority.md",
-    "AllPages/PagesFromTemplates/Priorities",
-    "AllPages/Templates/Bases/Features.base",
-    "AllPages/AllTeam/Documentation Structure.md",
-    "AllPages/Team Pages/All Teams Team Page.md",
-    "AllPages/Templates/Task Template.md",
-    "AllPages/PagesFromTemplates/Needs/Cool Other Thing.md",
-    "GretaMagicWand.md",
-    "AllPages/PagesFromTemplates/Features/Fireball.md",
-    "AllPages/Templates/Sprint Template.md",
-    "AllPages/PagesFromTemplates/Needs/Fireball Sounds.md",
-    "AllPages/PagesFromTemplates/Needs/Fireball VFX.md",
-    "AllPages/PagesFromTemplates/Needs/Magic Sounds.md",
-    "AllPages/Templates/Team Page Template.md",
-    "AllPages/Agile/Tasks/Untitled 1.md",
-    "AllPages/Templates/Status Template.md",
-    "AllPages/Agile/Tasks/Untitled 3.md",
-    "AllPages/Agile/Tasks/Untitled 2.md",
-    "AllPages/Templates/Bases/Needs (relay conflict 2026-08-17T21-57-35-302Z).base",
-    "AllPages/Agile",
-    "AllPages/PagesFromTemplates",
-    "AllPages/Agile/Sprints",
-    "AllPages/Agile/Tasks"
+    "Suck It Up/Templates/Feature Template.md",
+    "Suck It Up/03 Agile/Sprints/Sprint 1.md",
+    "Suck It Up/04 PagesFromTemplates/Needs/Testing new feature need.md",
+    "Suck It Up/Templates/Sprint Template.md",
+    "Suck It Up/01 Team Pages/Tech.md",
+    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T02-17-57-740Z).base",
+    "Suck It Up/Templates/Bases/Needs.base",
+    "Suck It Up/03 Agile/Tasks/NewTask.md",
+    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T02-16-46-679Z).base",
+    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T02-16-33-997Z).base",
+    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T02-16-32-891Z).base",
+    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T02-15-25-721Z).base",
+    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T02-14-40-565Z).base",
+    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T02-14-32-822Z).base",
+    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T02-14-24-550Z).base",
+    "Suck It Up/03 Agile/Tasks/ExTask.md",
+    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T02-13-04-557Z).base",
+    "Suck It Up/Templates/Task Template.md",
+    "Suck It Up/03 Agile/Tasks/ExTask (relay conflict 2026-08-18T01-48-12-249Z) (relay conflict 2026-08-18T02-10-42-845Z).md",
+    "Suck It Up/03 Agile/Tasks/ExTask (relay conflict 2026-08-18T01-48-12-249Z).md",
+    "Suck It Up/04 PagesFromTemplates/Features/Magic.md",
+    "Suck It Up/04 PagesFromTemplates/Features/Fireball.md",
+    "Suck It Up/Features/Fireball (relay conflict 2026-08-17T23-23-37-531Z).md",
+    "Suck It Up/01 Team Pages/Art.md",
+    "Suck It Up/01 Team Pages/Design.md",
+    "Suck It Up/04 PagesFromTemplates/Needs/Magic Sounds.md",
+    "Suck It Up/01 Team Pages/All Teams Team Page.md",
+    "Suck It Up/Templates/Need Template.md",
+    "Suck It Up/Templates/Status Template.md",
+    "Suck It Up/Templates/Team Page Template.md",
+    "Suck It Up/04 PagesFromTemplates/Priorities/Default.md",
+    "Suck It Up/04 PagesFromTemplates/Priorities/High Priority.md",
+    "Suck It Up/04 PagesFromTemplates/Statuses/COMPLETE.md",
+    "Suck It Up/04 PagesFromTemplates/Statuses/In Progress.md",
+    "Suck It Up/04 PagesFromTemplates/Statuses/Needs Revision.md",
+    "Suck It Up/04 PagesFromTemplates/Statuses/Not Started.md"
   ]
 }

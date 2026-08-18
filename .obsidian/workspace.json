@@ -11,14 +11,10 @@
             "id": "5f2b3bd2bb896e28",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Index.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Index"
+              "title": "New tab"
             }
           }
         ]
