@@ -1,8 +1,10 @@
 ---
 tags:
   - teampage
+  - art
 ---
-# Team Page Template Title
+# Art Team Page
+
 
 
 ## Active Needs

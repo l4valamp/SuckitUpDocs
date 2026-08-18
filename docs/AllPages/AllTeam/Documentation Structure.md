@@ -16,3 +16,10 @@
 	- status
 	- Assigned to
 	- Once a task is approved, all needs should be marked completed
+
+- If TASKS are COMPLETED the NEED is marked as done. 
+- Needs shown on:
+	- Feature Page
+	- Task Page
+	- Team Page
+- When Needs are completed, they are removed from the TEAM page. They are sorted to the bottom on TASK and FEATURE pages. 

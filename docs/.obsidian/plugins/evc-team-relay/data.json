@@ -9,9 +9,10 @@
         "audio": true,
         "videos": true,
         "pdfs": true,
-        "otherTypes": false
+        "otherTypes": true
       },
-      "onpremServerId": "mettleworks-relay"
+      "onpremServerId": "mettleworks-relay",
+      "connect": true
     }
   ],
   "endpoints": {},

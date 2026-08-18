@@ -6,6 +6,13 @@
     "features": "multitext",
     "teams": "multitext",
     "status": "text",
-    "priority": "number"
+    "priority": "number",
+    "needs": "multitext",
+    "sprint": "multitext",
+    "start": "date",
+    "end": "date",
+    "storypoints": "number",
+    "story points": "number",
+    "done": "checkbox"
   }
 }
