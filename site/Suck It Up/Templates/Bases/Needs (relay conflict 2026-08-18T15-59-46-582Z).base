@@ -1,0 +1,151 @@
+filters:
+  and:
+    - file.tags.contains("needs")
+    - '!file.name.contains("Template")'
+formulas:
+  Priority: link(status).asFile().properties.priority.tostring()
+  Status Priority Number: link(status).asFile().properties.priority
+  Feature Priority: link(formula.FilterHighPriorities[0]).asFile().properties.priority.asFile().properties.priorityVal.toString() + " |  " + link(formula.FilterHighPriorities[0]).asFile().name.toString() + " |  " +  link(formula.FilterHighPriorities[0]).asFile().properties.priority.asFile().name.toString()
+  FirstFeature: |+
+    features.map(value.asFile().properties.priority + " | "  + value)
+      .sort()
+      .map(value.split(" | ")[1])
+
+  SortFeaturesByPriority: |-
+    features.map(value.asFile().properties.priority + " | "  + value)
+      .sort()
+      .map(value.split(" | ")[1])
+  Feature Parent: |
+    " ".repeat(20).split("").reduce(
+        if(
+            acc[0].asFile().properties.features.isEmpty(),
+
+            acc,
+
+            [
+                acc[0].asFile().properties.features[0],
+                acc[1] + " => " + acc[0].asFile().properties.features[0].asFile().name.toString()
+            ]
+        ),
+
+        [
+            link(formula.FirstFeature[0]),
+            link(formula.FirstFeature[0]).asFile().name.toString()
+        ]
+    )[1]
+  Untitled: |-
+    link(formula.FirstFeature[0]).asFile().properties.status.asFile().properties.priority.toString() + 
+    "  |  " + link(formula.FirstFeature[0]).asFile().name.toString()
+     + "  |  " +  link(formula.FirstFeature[0]).asFile().properties.status.asFile().name.toString()
+  auto-status: |-
+    if(
+      file.backlinks.filter(value.asFile().tags.contains("#task")).length > 0,
+      file.backlinks
+        .filter(value.asFile().tags.contains("#task"))
+        .map(value.asFile().properties.status),
+      link("UNASSIGNED")
+    )
+  FilterHighPriorities: |
+    features.map(value.asFile().properties.priority + " | "  + value)
+      .sort()
+      .map(value.split(" | ")[1])
+  ShowAssignedTask: |-
+    if(
+      file.backlinks.filter(value.asFile().tags.contains("#task")).length > 0,
+      file.backlinks
+        .filter(value.asFile().tags.contains("#task"))
+        .map(value.asFile().link((name)),
+      link("UNASSIGNED")
+    )
+properties:
+  formula.Priority:
+    displayName: Status Priority
+  formula.FirstFeature:
+    displayName: SortedFeatures
+  formula.Feature Priority:
+    displayName: HighestPriorityFeature
+  formula.Feature Parent:
+    displayName: Parent Feature
+  formula.Untitled:
+    displayName: NumberedTopFeature
+views:
+  - type: table
+    name: Systems
+    filters:
+      and:
+        - or:
+            - and:
+                - this.hasTag("#feature")
+                - features.contains(this)
+            - and:
+                - this.hasTag("#task")
+                - file.backlinks.contains(this)
+    order:
+      - file.name
+      - teams
+      - formula.auto-status
+      - formula.ShowAssignedTask
+    sort:
+      - property: file.name
+        direction: DESC
+    columnSize:
+      file.name: 193
+      note.teams: 164
+  - type: table
+    name: Needs
+    filters:
+      and:
+        - file.tags.contains("needs")
+        - or:
+            - features.contains(this)
+            - this.inFolder("AllPages/Templates/Bases")
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: TeamPage
+    filters:
+      and:
+        - and:
+            - and:
+                - this.tags.contains("#teampage")
+                - teams.contains(this)
+                - formula["auto-status"] != link("COMPLETE")
+    groupBy:
+      property: formula.Feature Priority
+      direction: DESC
+    order:
+      - file.name
+      - teams
+      - formula.Feature Parent
+      - formula.auto-status
+    sort:
+      - property: features
+        direction: DESC
+      - property: formula.Feature Parent
+        direction: DESC
+      - property: formula.Status Priority Number
+        direction: DESC
+    columnSize:
+      file.name: 192
+      note.teams: 115
+      formula.Feature Parent: 182
+  - type: table
+    name: all
+    groupBy:
+      property: formula.Feature Priority
+      direction: ASC
+    order:
+      - file.name
+      - teams
+      - features
+      - formula.auto-status
+    sort:
+      - property: formula.auto-status
+        direction: DESC
+    columnSize:
+      note.features: 179
+  - type: table
+    name: FeaturePage
+  - type: table
+    name: TaskPage

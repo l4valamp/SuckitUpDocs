@@ -40,7 +40,7 @@ views:
     filters:
       and:
         - or:
-            - or:
+            - and:
                 - sprint.contains(this)
                 - this.tags.contains("#sprint")
             - and:

@@ -9,7 +9,7 @@ theme:
   name: material
   palette: 
     scheme: slate
-    primary: blue
+    primary: grey
     accent: deep orange
   
   features:
@@ -21,8 +21,7 @@ theme:
 
 plugins:
   - search
-  - awesome-nav # this should be good
-  - databaseview
+  - awesome-nav
   - roamlinks #this too
   - entity #this is our custom plugin for variables
 
@@ -44,8 +43,8 @@ markdown_extensions:
   - toc:
       permalink: true
 
-extra_css:
-  - stylesheets/extra.css
-
 extra_javascript:
   - javascripts/entities.js
+
+extra_css:
+  - stylesheets/extra.css

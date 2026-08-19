@@ -12,8 +12,10 @@
     "start": "date",
     "end": "date",
     "storypoints": "number",
-    "story points": "number",
+    "story points": "text",
     "done": "checkbox",
-    "PriorityVal": "number"
+    "PriorityVal": "number",
+    "team members": "multitext",
+    "categories": "multitext"
   }
 }

@@ -10,7 +10,9 @@ tags:
 
 
 ## Future Needs
+
 ![[Suck It Up/Templates/Bases/Needs.base#TeamPage]]
+
 
 
 

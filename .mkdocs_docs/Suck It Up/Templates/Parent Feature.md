@@ -4,10 +4,13 @@ tags:
 system family:
 parent features:
 priority: "[[Default]]"
+categories:
 ---
 
 
 ### Needs:
-![[Suck It Up/Templates/Bases/Needs.base]]
+| Name | Teams | auto-status | ShowAssignedTask |
+| --- | --- | --- | --- |
+| No matching pages |  |  |  |
 
 

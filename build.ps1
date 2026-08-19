@@ -7,6 +7,25 @@ if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
 
-Write-Host "Starting MkDocs..." -ForegroundColor Green
+Write-Host "MkDocs source generated successfully." -ForegroundColor Green
 
-mkdocs serve
+if ($args -contains "build") {
+
+    Write-Host "Building MkDocs site..." -ForegroundColor Cyan
+
+    mkdocs build
+
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "MkDocs build failed." -ForegroundColor Red
+        exit $LASTEXITCODE
+    }
+
+    Write-Host "MkDocs build complete." -ForegroundColor Green
+
+}
+else {
+
+    Write-Host "Starting MkDocs development server..." -ForegroundColor Green
+
+    mkdocs serve
+}

@@ -1,6 +1,7 @@
 filters:
   and:
     - file.tags.contains("needs")
+    - '!file.name.contains("Template")'
 formulas:
   Priority: link(status).asFile().properties.priority.tostring()
   Status Priority Number: link(status).asFile().properties.priority
@@ -36,15 +37,26 @@ formulas:
     link(formula.FirstFeature[0]).asFile().properties.status.asFile().properties.priority.toString() + 
     "  |  " + link(formula.FirstFeature[0]).asFile().name.toString()
      + "  |  " +  link(formula.FirstFeature[0]).asFile().properties.status.asFile().name.toString()
-  auto-status: |+
-    file.backlinks
-      .filter(value.asFile().tags.contains("#task"))
-      .map(value.asFile().properties.status)
-
+  auto-status: |-
+    if(
+      file.backlinks.filter(value.asFile().tags.contains("#task")).length > 0,
+      file.backlinks
+        .filter(value.asFile().tags.contains("#task"))
+        .map(value.asFile().properties.status),
+      link("UNASSIGNED")
+    )
   FilterHighPriorities: |
     features.map(value.asFile().properties.priority + " | "  + value)
       .sort()
       .map(value.split(" | ")[1])
+  ShowAssignedTask: |-
+    if(
+      file.backlinks.filter(value.asFile().tags.contains("#task")).length > 0,
+      file.backlinks
+        .filter(value.asFile().tags.contains("#task"))
+        .map(value),
+      link("UNASSIGNED")
+    )
 properties:
   formula.Priority:
     displayName: Status Priority
@@ -70,12 +82,15 @@ views:
                 - file.backlinks.contains(this)
     order:
       - file.name
-      - status
-      - tags
       - teams
+      - formula.auto-status
+      - formula.ShowAssignedTask
     sort:
       - property: file.name
         direction: DESC
+    columnSize:
+      file.name: 193
+      note.teams: 164
   - type: table
     name: Needs
     filters:
@@ -92,9 +107,10 @@ views:
     filters:
       and:
         - and:
-            - or:
-                - this.tags.contains(teampage)
+            - and:
+                - this.tags.contains("#teampage")
                 - teams.contains(this)
+                - formula["auto-status"] != link("COMPLETE")
     groupBy:
       property: formula.Feature Priority
       direction: DESC
@@ -112,7 +128,7 @@ views:
         direction: DESC
     columnSize:
       file.name: 192
-      note.teams: 180
+      note.teams: 115
       formula.Feature Parent: 182
   - type: table
     name: all

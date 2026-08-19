@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 from typing import Any
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 
 import yaml
 
@@ -47,7 +47,6 @@ class DBViewPlugin(BasePlugin):
     def on_config(self, config):
         self.docs_dir = Path(config["docs_dir"]).resolve()
 
-        # MkDocs URL configuration.
         self.use_directory_urls = config.get(
             "use_directory_urls",
             True,
@@ -57,28 +56,17 @@ class DBViewPlugin(BasePlugin):
             config.get("site_url") or ""
         ).strip()
 
-        # Extract the path portion of site_url.
-        # For:
-        #   https://l4valamp.github.io/suckitup-docs/
-        #
-        # this becomes:
-        #   /suckitup-docs/
         if site_url:
-            from urllib.parse import urlparse
-
             parsed = urlparse(site_url)
             self.site_url_path = parsed.path or "/"
         else:
             self.site_url_path = "/"
 
         if not self.site_url_path.startswith("/"):
-            self.site_url_path = (
-                "/" + self.site_url_path
-            )
+            self.site_url_path = "/" + self.site_url_path
 
         if not self.site_url_path.endswith("/"):
             self.site_url_path += "/"
-
 
         print(f"[StaticBases] docs: {self.docs_dir}")
 
@@ -173,9 +161,7 @@ class DBViewPlugin(BasePlugin):
                 )
                 continue
 
-            frontmatter = self._parse_frontmatter(
-                text
-            )
+            frontmatter = self._parse_frontmatter(text)
 
             note = {
                 "path": path.resolve(),
@@ -184,17 +170,13 @@ class DBViewPlugin(BasePlugin):
                     self.docs_dir
                 ),
                 "frontmatter": frontmatter,
-                "tags": self._get_tags(
-                    frontmatter
-                ),
+                "tags": self._get_tags(frontmatter),
             }
 
-            # Full normalized path lookup.
             self.notes[
                 path.as_posix().lower()
             ] = note
 
-            # Filename/stem lookup.
             self.notes.setdefault(
                 path.stem.lower(),
                 note,
@@ -281,9 +263,7 @@ class DBViewPlugin(BasePlugin):
                 f"{'#' + view_name if view_name else ''}"
             )
 
-            base_path = self._find_base(
-                base_ref
-            )
+            base_path = self._find_base(base_ref)
 
             if base_path is None:
 
@@ -341,10 +321,6 @@ class DBViewPlugin(BasePlugin):
             .strip("/")
         )
 
-        # ----------------------------------------------------
-        # Exact path
-        # ----------------------------------------------------
-
         exact = self.docs_dir / base_ref
 
         if exact.is_file():
@@ -353,10 +329,6 @@ class DBViewPlugin(BasePlugin):
                 f"{exact}"
             )
             return exact.resolve()
-
-        # ----------------------------------------------------
-        # Add .base extension
-        # ----------------------------------------------------
 
         if not base_ref.lower().endswith(".base"):
 
@@ -371,10 +343,6 @@ class DBViewPlugin(BasePlugin):
                     f"{exact_with_extension}"
                 )
                 return exact_with_extension.resolve()
-
-        # ----------------------------------------------------
-        # Filename lookup
-        # ----------------------------------------------------
 
         filename = Path(base_ref).name
 
@@ -394,10 +362,6 @@ class DBViewPlugin(BasePlugin):
 
             return path
 
-        # ----------------------------------------------------
-        # Recursive search
-        # ----------------------------------------------------
-
         matches = [
             p
             for p in self.docs_dir.rglob(filename)
@@ -408,7 +372,6 @@ class DBViewPlugin(BasePlugin):
         if not matches:
             return None
 
-        # Prefer Templates/Bases.
         for path in matches:
 
             normalized = (
@@ -443,9 +406,7 @@ class DBViewPlugin(BasePlugin):
                 encoding="utf-8"
             )
 
-            base = yaml.safe_load(
-                text
-            ) or {}
+            base = yaml.safe_load(text) or {}
 
         except Exception as exc:
 
@@ -466,19 +427,12 @@ class DBViewPlugin(BasePlugin):
 
             return None
 
-        # ----------------------------------------------------
-        # Debug the actual .base structure
-        # ----------------------------------------------------
-
         print(
             f"[StaticBases] Base keys: "
             f"{list(base.keys())}"
         )
 
-        views = base.get(
-            "views",
-            [],
-        )
+        views = base.get("views", [])
 
         if not isinstance(views, list):
 
@@ -516,19 +470,6 @@ class DBViewPlugin(BasePlugin):
                     f"type={candidate.get('type')!r}"
                 )
 
-            else:
-
-                print(
-                    f"[StaticBases] View {index}: "
-                    f"{candidate!r}"
-                )
-
-        # ----------------------------------------------------
-        # THIS IS THE IMPORTANT PART
-        #
-        # Select the requested view before using "view".
-        # ----------------------------------------------------
-
         view = self._choose_view(
             views,
             view_name,
@@ -541,21 +482,6 @@ class DBViewPlugin(BasePlugin):
                 f"[StaticBases] WARNING: "
                 f"Could not find requested view "
                 f"'{view_name}' in {base_path}"
-            )
-
-            available = []
-
-            for candidate in views:
-
-                if isinstance(candidate, dict):
-
-                    available.append(
-                        candidate.get("name")
-                    )
-
-            print(
-                f"[StaticBases] Available views: "
-                f"{available}"
             )
 
             return None
@@ -624,11 +550,6 @@ class DBViewPlugin(BasePlugin):
             for column in columns
         ]
 
-        print(
-            f"[StaticBases] Columns: "
-            f"{columns}"
-        )
-
         # ----------------------------------------------------
         # Rows
         # ----------------------------------------------------
@@ -650,11 +571,6 @@ class DBViewPlugin(BasePlugin):
 
             rows.append(row)
 
-        print(
-            f"[StaticBases] Generated "
-            f"{len(rows)} table rows"
-        )
-
         # ----------------------------------------------------
         # Title
         # ----------------------------------------------------
@@ -664,22 +580,11 @@ class DBViewPlugin(BasePlugin):
             view_name or base_path.stem,
         )
 
-        # ----------------------------------------------------
-        # Render Markdown
-        # ----------------------------------------------------
-
-        table = self._markdown_table(
+        return self._markdown_table(
             title,
             columns,
             rows,
         )
-
-        print(
-            f"[StaticBases] Table generated "
-            f"successfully for {base_path}"
-        )
-
-        return table
 
     # ========================================================
     # View selection
@@ -691,32 +596,6 @@ class DBViewPlugin(BasePlugin):
         view_name: str | None,
         base_path: Path | None = None,
     ):
-        """
-        Select a Bases view.
-
-        Explicit:
-
-            ![[Tasks.base#Needs]]
-
-        selects:
-
-            name: Needs
-
-        Plain:
-
-            ![[Needs.base]]
-
-        first tries to find a view named "Needs",
-        based on the filename "Needs.base".
-
-        Otherwise the first table view is used.
-        """
-
-        # ----------------------------------------------------
-        # Explicit view
-        #
-        # ![[Tasks.base#Needs]]
-        # ----------------------------------------------------
 
         if view_name:
 
@@ -724,11 +603,6 @@ class DBViewPlugin(BasePlugin):
                 view_name
                 .strip()
                 .lower()
-            )
-
-            print(
-                f"[StaticBases] Looking for "
-                f"explicit view: {wanted!r}"
             )
 
             for view in views:
@@ -741,28 +615,9 @@ class DBViewPlugin(BasePlugin):
                 ).strip().lower()
 
                 if name == wanted:
-
-                    print(
-                        f"[StaticBases] Explicit view "
-                        f"matched: {name!r}"
-                    )
-
                     return view
 
-            print(
-                f"[StaticBases] Explicit view "
-                f"{wanted!r} was not found."
-            )
-
             return None
-
-        # ----------------------------------------------------
-        # Plain embed
-        #
-        # ![[Needs.base]]
-        #
-        # Try a view named "Needs".
-        # ----------------------------------------------------
 
         if base_path:
 
@@ -770,12 +625,6 @@ class DBViewPlugin(BasePlugin):
                 base_path.stem
                 .strip()
                 .lower()
-            )
-
-            print(
-                f"[StaticBases] No explicit view. "
-                f"Trying base-name view: "
-                f"{base_name!r}"
             )
 
             for view in views:
@@ -788,17 +637,7 @@ class DBViewPlugin(BasePlugin):
                 ).strip().lower()
 
                 if name == base_name:
-
-                    print(
-                        f"[StaticBases] Base-name view "
-                        f"matched: {name!r}"
-                    )
-
                     return view
-
-        # ----------------------------------------------------
-        # Otherwise first table view.
-        # ----------------------------------------------------
 
         for view in views:
 
@@ -811,29 +650,11 @@ class DBViewPlugin(BasePlugin):
                 ).lower()
                 == "table"
             ):
-
-                print(
-                    "[StaticBases] Using first "
-                    "table view."
-                )
-
                 return view
-
-        # ----------------------------------------------------
-        # Last fallback:
-        # use first dictionary view.
-        # ----------------------------------------------------
 
         for view in views:
 
             if isinstance(view, dict):
-
-                print(
-                    "[StaticBases] No table view "
-                    "was explicitly identified. "
-                    "Using first view."
-                )
-
                 return view
 
         return None
@@ -852,11 +673,13 @@ class DBViewPlugin(BasePlugin):
         if not filter_config:
             return True
 
-        return self._evaluate_expression(
+        result = self._evaluate_expression(
             filter_config,
             note,
             current_file,
         )
+
+        return bool(result)
 
     def _evaluate_expression(
         self,
@@ -865,35 +688,33 @@ class DBViewPlugin(BasePlugin):
         current_file,
     ) -> bool:
 
-        # -----------------------------------------------
+        # ----------------------------------------------------
         # Boolean literal
-        # -----------------------------------------------
+        # ----------------------------------------------------
 
         if isinstance(expression, bool):
             return expression
 
-        # -----------------------------------------------
+        # ----------------------------------------------------
         # Lists mean AND in Bases filter syntax.
-        # -----------------------------------------------
+        # ----------------------------------------------------
 
         if isinstance(expression, list):
 
             for item in expression:
 
-                result = self._evaluate_expression(
+                if not self._evaluate_expression(
                     item,
                     note,
                     current_file,
-                )
-
-                if not result:
+                ):
                     return False
 
             return True
 
-        # -----------------------------------------------
+        # ----------------------------------------------------
         # String expression
-        # -----------------------------------------------
+        # ----------------------------------------------------
 
         if isinstance(expression, str):
 
@@ -908,16 +729,22 @@ class DBViewPlugin(BasePlugin):
                 current_file,
             )
 
-        # -----------------------------------------------
+        # ----------------------------------------------------
         # Mapping expression
-        # -----------------------------------------------
+        # ----------------------------------------------------
 
         if not isinstance(expression, dict):
-            return True
 
-        # -----------------------------------------------
+            print(
+                f"[StaticBases] Unknown filter type: "
+                f"{type(expression).__name__}"
+            )
+
+            return False
+
+        # ----------------------------------------------------
         # AND
-        # -----------------------------------------------
+        # ----------------------------------------------------
 
         if "and" in expression:
 
@@ -926,18 +753,20 @@ class DBViewPlugin(BasePlugin):
             if not isinstance(values, list):
                 values = [values]
 
-            return all(
-                self._evaluate_expression(
+            for item in values:
+
+                if not self._evaluate_expression(
                     item,
                     note,
                     current_file,
-                )
-                for item in values
-            )
+                ):
+                    return False
 
-        # -----------------------------------------------
+            return True
+
+        # ----------------------------------------------------
         # OR
-        # -----------------------------------------------
+        # ----------------------------------------------------
 
         if "or" in expression:
 
@@ -946,35 +775,35 @@ class DBViewPlugin(BasePlugin):
             if not isinstance(values, list):
                 values = [values]
 
-            return any(
-                self._evaluate_expression(
+            for item in values:
+
+                if self._evaluate_expression(
                     item,
                     note,
                     current_file,
-                )
-                for item in values
-            )
+                ):
+                    return True
 
-        # -----------------------------------------------
+            return False
+
+        # ----------------------------------------------------
         # file.tags.contains
-        # -----------------------------------------------
+        # ----------------------------------------------------
 
         if "file.tags.contains" in expression:
 
             return self._contains(
                 note["tags"],
-                expression[
-                    "file.tags.contains"
-                ],
+                expression["file.tags.contains"],
             )
 
-        # -----------------------------------------------
+        # ----------------------------------------------------
         # Nested:
         #
         # file:
         #   tags:
         #     contains: needs
-        # -----------------------------------------------
+        # ----------------------------------------------------
 
         if "file" in expression:
 
@@ -993,43 +822,94 @@ class DBViewPlugin(BasePlugin):
                             tags["contains"],
                         )
 
-        # -----------------------------------------------
-        # Unknown mapping.
-        # -----------------------------------------------
+        print(
+            f"[StaticBases] Unknown filter mapping: "
+            f"{expression}"
+        )
 
-        return True
+        return False
+
+    # ========================================================
+    # String filter parser
+    # ========================================================
 
     def _evaluate_string_expression(
         self,
         expression: str,
         note,
         current_file,
-    ):
+    ) -> bool:
 
         expression = expression.strip()
 
         if not expression:
             return True
 
-        # ------------------------------------------------
-        # NOT operator
+        # ----------------------------------------------------
+        # Strip balanced outer parentheses.
+        # ----------------------------------------------------
+
+        expression = self._strip_outer_parentheses(
+            expression
+        )
+
+        # ----------------------------------------------------
+        # OR
         #
-        # !file.name.contains("Template")
-        # ------------------------------------------------
+        # Must happen before AND because OR has lower
+        # precedence.
+        # ----------------------------------------------------
+
+        parts = self._split_boolean_operator(
+            expression,
+            "||",
+        )
+
+        if len(parts) > 1:
+
+            return any(
+                self._evaluate_string_expression(
+                    part,
+                    note,
+                    current_file,
+                )
+                for part in parts
+            )
+
+        # ----------------------------------------------------
+        # AND
+        # ----------------------------------------------------
+
+        parts = self._split_boolean_operator(
+            expression,
+            "&&",
+        )
+
+        if len(parts) > 1:
+
+            return all(
+                self._evaluate_string_expression(
+                    part,
+                    note,
+                    current_file,
+                )
+                for part in parts
+            )
+
+        # ----------------------------------------------------
+        # NOT
+        # ----------------------------------------------------
 
         if expression.startswith("!"):
-
-            inner = expression[1:].strip()
-
             return not self._evaluate_string_expression(
-                inner,
+                expression[1:].strip(),
                 note,
                 current_file,
             )
 
-        # ------------------------------------------------
+        # ----------------------------------------------------
         # file.name.contains(...)
-        # ------------------------------------------------
+        # ----------------------------------------------------
 
         match = re.match(
             r"""
@@ -1056,14 +936,9 @@ class DBViewPlugin(BasePlugin):
                 in note["name"].lower()
             )
 
-        # ------------------------------------------------
+        # ----------------------------------------------------
         # file.tags.contains(...)
-        #
-        # Handles:
-        #
-        # file.tags.contains("needs")
-        # file.tags.contains(needs)
-        # ------------------------------------------------
+        # ----------------------------------------------------
 
         match = re.match(
             r"""
@@ -1090,14 +965,9 @@ class DBViewPlugin(BasePlugin):
                 wanted,
             )
 
-        # ------------------------------------------------
+        # ----------------------------------------------------
         # this.tags.contains(...)
-        #
-        # Handles:
-        #
-        # this.tags.contains(teampage)
-        # this.tags.contains("teampage")
-        # ------------------------------------------------
+        # ----------------------------------------------------
 
         match = re.match(
             r"""
@@ -1124,14 +994,9 @@ class DBViewPlugin(BasePlugin):
                 wanted,
             )
 
-        # ------------------------------------------------
+        # ----------------------------------------------------
         # this.hasTag(...)
-        #
-        # Handles:
-        #
-        # this.hasTag("#feature")
-        # this.hasTag(feature)
-        # ------------------------------------------------
+        # ----------------------------------------------------
 
         match = re.match(
             r"""
@@ -1157,9 +1022,9 @@ class DBViewPlugin(BasePlugin):
                 wanted,
             )
 
-        # ------------------------------------------------
+        # ----------------------------------------------------
         # this.inFolder(...)
-        # ------------------------------------------------
+        # ----------------------------------------------------
 
         match = re.match(
             r"""
@@ -1190,10 +1055,10 @@ class DBViewPlugin(BasePlugin):
                 .replace("\\", "/")
             )
 
-            # Check the actual folder containing the note.
-            relative_folder = str(
-                Path(relative).parent
-            ).replace("\\", "/")
+            relative_folder = (
+                str(Path(relative).parent)
+                .replace("\\", "/")
+            )
 
             return (
                 relative_folder == folder
@@ -1202,14 +1067,17 @@ class DBViewPlugin(BasePlugin):
                 )
             )
 
-        # ------------------------------------------------
+        # ----------------------------------------------------
         # property.contains(this)
+        #
+        # Examples:
         #
         # features.contains(this)
         # teams.contains(this)
         # sprint.contains(this)
         # needs.contains(this)
-        # ------------------------------------------------
+        # file.backlinks.contains(this)
+        # ----------------------------------------------------
 
         match = re.match(
             r"""
@@ -1227,7 +1095,10 @@ class DBViewPlugin(BasePlugin):
 
         if match:
 
-            property_name = match.group(1).strip()
+            property_name = (
+                match.group(1)
+                .strip()
+            )
 
             # --------------------------------------------
             # file.backlinks.contains(this)
@@ -1240,6 +1111,10 @@ class DBViewPlugin(BasePlugin):
                     current_file,
                 )
 
+            # --------------------------------------------
+            # Normal property
+            # --------------------------------------------
+
             values = self._property_values(
                 note,
                 property_name,
@@ -1266,187 +1141,253 @@ class DBViewPlugin(BasePlugin):
 
             return False
 
-        # ------------------------------------------------
+        # ----------------------------------------------------
+        # Direct property equality.
+        #
+        # Example:
+        #
+        # status == [[Complete]]
+        #
+        # This is intentionally limited/simple.
+        # ----------------------------------------------------
+
+        match = re.match(
+            r"""
+            ^
+            ([A-Za-z0-9_. ]+)
+            \s*
+            (==|=)
+            \s*
+            (.+)
+            $
+            """,
+            expression,
+            re.VERBOSE,
+        )
+
+        if match:
+
+            property_name = (
+                match.group(1)
+                .strip()
+            )
+
+            wanted = (
+                match.group(3)
+                .strip()
+            )
+
+            values = self._property_values(
+                note,
+                property_name,
+            )
+
+            for value in values:
+
+                if self._values_equal(
+                    value,
+                    wanted,
+                ):
+                    return True
+
+            return False
+
+        # ----------------------------------------------------
         # Unknown expression.
         #
         # IMPORTANT:
-        # Unknown expressions should not cause the
-        # entire Base to disappear.
-        # ------------------------------------------------
+        #
+        # Unknown expressions now return FALSE.
+        #
+        # This prevents a broken filter from causing
+        # unrelated notes to appear.
+        # ----------------------------------------------------
 
         print(
             f"[StaticBases] Unrecognized filter "
-            f"expression: {expression}"
+            f"expression: {expression!r} "
+            f"for note {note['name']!r}"
         )
 
-        return True
+        return False
 
+    # ========================================================
+    # Boolean parser helpers
+    # ========================================================
+
+    def _strip_outer_parentheses(
+        self,
+        expression: str,
+    ) -> str:
 
         expression = expression.strip()
 
-        # ----------------------------------------------------
-        # file.tags.contains("needs")
-        # ----------------------------------------------------
+        while (
+            expression.startswith("(")
+            and expression.endswith(")")
+            and self._parentheses_wrap_entire_expression(
+                expression
+            )
+        ):
+            expression = expression[1:-1].strip()
 
-        match = re.search(
-            r"""
-            file
-            \.tags
-            \.contains
-            \(
-                ['"]([^'"]+)['"]
-            \)
-            """,
-            expression,
-            re.VERBOSE,
+        return expression
+
+    def _parentheses_wrap_entire_expression(
+        self,
+        expression: str,
+    ) -> bool:
+
+        depth = 0
+        quote_char = None
+
+        for index, char in enumerate(expression):
+
+            if quote_char:
+
+                if char == quote_char:
+                    quote_char = None
+
+                continue
+
+            if char in ("'", '"'):
+                quote_char = char
+                continue
+
+            if char == "(":
+                depth += 1
+
+            elif char == ")":
+
+                depth -= 1
+
+                if depth == 0 and index != len(expression) - 1:
+                    return False
+
+        return depth == 0
+
+    def _split_boolean_operator(
+        self,
+        expression: str,
+        operator: str,
+    ) -> list[str]:
+
+        parts = []
+
+        depth = 0
+        quote_char = None
+        start = 0
+
+        index = 0
+
+        while index < len(expression):
+
+            char = expression[index]
+
+            if quote_char:
+
+                if char == quote_char:
+                    quote_char = None
+
+                index += 1
+                continue
+
+            if char in ("'", '"'):
+
+                quote_char = char
+                index += 1
+                continue
+
+            if char == "(":
+
+                depth += 1
+                index += 1
+                continue
+
+            if char == ")":
+
+                depth -= 1
+                index += 1
+                continue
+
+            if (
+                depth == 0
+                and expression.startswith(
+                    operator,
+                    index,
+                )
+            ):
+
+                parts.append(
+                    expression[
+                        start:index
+                    ].strip()
+                )
+
+                index += len(operator)
+
+                start = index
+                continue
+
+            index += 1
+
+        if parts:
+
+            parts.append(
+                expression[start:].strip()
+            )
+
+            return [
+                part
+                for part in parts
+                if part
+            ]
+
+        return [expression]
+
+    def _values_equal(
+        self,
+        value,
+        wanted,
+    ) -> bool:
+
+        wanted = wanted.strip()
+
+        if (
+            len(wanted) >= 2
+            and wanted[0] in ("'", '"')
+            and wanted[-1] == wanted[0]
+        ):
+            wanted = wanted[1:-1]
+
+        value_text = str(value).strip()
+
+        if value_text.lower() == wanted.lower():
+            return True
+
+        resolved_value = self._resolve_link(
+            value
         )
 
-        if match:
-
-            return self._contains(
-                note["tags"],
-                match.group(1),
-            )
-
-        # ----------------------------------------------------
-        # this.tags.contains(...)
-        # ----------------------------------------------------
-
-        match = re.search(
-            r"""
-            this
-            \.tags
-            \.contains
-            \(
-                ['"]([^'"]+)['"]
-            \)
-            """,
-            expression,
-            re.VERBOSE,
+        resolved_wanted = self._resolve_link(
+            wanted
         )
 
-        if match:
-
-            return self._contains(
-                note["tags"],
-                match.group(1),
-            )
-
-        # ----------------------------------------------------
-        # this.hasTag(...)
-        # ----------------------------------------------------
-
-        match = re.search(
-            r"""
-            this
-            \.hasTag
-            \(
-                ['"]?#?([^'"]+)['"]?
-            \)
-            """,
-            expression,
-            re.VERBOSE,
-        )
-
-        if match:
-
-            return self._contains(
-                note["tags"],
-                match.group(1),
-            )
-
-        # ----------------------------------------------------
-        # this.inFolder(...)
-        # ----------------------------------------------------
-
-        match = re.search(
-            r"""
-            this
-            \.inFolder
-            \(
-                ['"]([^'"]+)['"]
-            \)
-            """,
-            expression,
-            re.VERBOSE,
-        )
-
-        if match:
-
-            folder = (
-                match.group(1)
-                .replace("\\", "/")
-                .strip("/")
-            )
-
-            relative = (
-                note["relative_path"]
-                .as_posix()
-                .strip("/")
-            )
+        if resolved_value and resolved_wanted:
 
             return (
-                relative == folder
-                or relative.startswith(
-                    folder + "/"
-                )
+                resolved_value["path"].resolve()
+                == resolved_wanted["path"].resolve()
             )
 
-        # ----------------------------------------------------
-        # property.contains(this)
-        # ----------------------------------------------------
+        if resolved_value:
 
-        match = re.search(
-            r"""
-            ([A-Za-z0-9_.]+)
-            \.contains
-            \(
-                this
-            \)
-            """,
-            expression,
-            re.VERBOSE,
-        )
-
-        if match:
-
-            property_name = match.group(1)
-
-            if property_name == "file.backlinks":
-
-                return self._has_backlink_to(
-                    note,
-                    current_file,
-                )
-
-            values = self._property_values(
-                note,
-                property_name,
+            return (
+                resolved_value["name"].lower()
+                == wanted.lstrip("#").lower()
             )
 
-            if current_file is None:
-                return False
-
-            current_file = current_file.resolve()
-
-            for value in values:
-
-                resolved = self._resolve_link(
-                    value
-                )
-
-                if resolved:
-
-                    if (
-                        resolved["path"].resolve()
-                        == current_file
-                    ):
-                        return True
-
-            return False
-
-        # Unknown expression.
-        return None
+        return False
 
     # ========================================================
     # Sorting
@@ -1519,9 +1460,7 @@ class DBViewPlugin(BasePlugin):
         ):
             pass
 
-        return str(
-            value
-        ).lower()
+        return str(value).lower()
 
     # ========================================================
     # Column values
@@ -1535,22 +1474,12 @@ class DBViewPlugin(BasePlugin):
 
         column = str(column)
 
-        # ----------------------------------------------------
-        # file.name
-        # ----------------------------------------------------
-
         if column in (
             "file.name",
             "note.file.name",
         ):
 
-            return self._link_to_note(
-                note
-            )
-
-        # ----------------------------------------------------
-        # file.path
-        # ----------------------------------------------------
+            return self._link_to_note(note)
 
         if column == "file.path":
 
@@ -1561,10 +1490,6 @@ class DBViewPlugin(BasePlugin):
                 .replace("\\", "/")
             )
 
-        # ----------------------------------------------------
-        # file.tags
-        # ----------------------------------------------------
-
         if column in (
             "file.tags",
             "tags",
@@ -1574,19 +1499,11 @@ class DBViewPlugin(BasePlugin):
                 note["tags"]
             )
 
-        # ----------------------------------------------------
-        # file.folder
-        # ----------------------------------------------------
-
         if column == "file.folder":
 
             return str(
                 note["relative_path"].parent
             ).replace("\\", "/")
-
-        # ----------------------------------------------------
-        # formula.*
-        # ----------------------------------------------------
 
         if column.startswith(
             "formula."
@@ -1601,10 +1518,6 @@ class DBViewPlugin(BasePlugin):
                 note,
             )
 
-        # ----------------------------------------------------
-        # note.property
-        # ----------------------------------------------------
-
         if column.startswith(
             "note."
         ):
@@ -1617,9 +1530,7 @@ class DBViewPlugin(BasePlugin):
             "frontmatter"
         ].get(column)
 
-        return self._format_value(
-            value
-        )
+        return self._format_value(value)
 
     # ========================================================
     # Formulas
@@ -1631,9 +1542,7 @@ class DBViewPlugin(BasePlugin):
         note,
     ):
 
-        properties = note[
-            "frontmatter"
-        ]
+        properties = note["frontmatter"]
 
         # ----------------------------------------------------
         # Priority
@@ -1644,9 +1553,7 @@ class DBViewPlugin(BasePlugin):
             "Status Priority Number",
         ):
 
-            status = properties.get(
-                "status"
-            )
+            status = properties.get("status")
 
             status_note = self._resolve_link(
                 status
@@ -1711,9 +1618,7 @@ class DBViewPlugin(BasePlugin):
             ].get("priority")
 
             priority_note = (
-                self._resolve_link(
-                    priority
-                )
+                self._resolve_link(priority)
             )
 
             priority_value = ""
@@ -1761,9 +1666,7 @@ class DBViewPlugin(BasePlugin):
             for feature in features:
 
                 feature_note = (
-                    self._resolve_link(
-                        feature
-                    )
+                    self._resolve_link(feature)
                 )
 
                 if feature_note:
@@ -1878,14 +1781,10 @@ class DBViewPlugin(BasePlugin):
                 if status:
 
                     statuses.append(
-                        self._format_value(
-                            status
-                        )
+                        self._format_value(status)
                     )
 
-            return ", ".join(
-                statuses
-            )
+            return ", ".join(statuses)
 
         # ----------------------------------------------------
         # FilterHighPriorities
@@ -1903,9 +1802,7 @@ class DBViewPlugin(BasePlugin):
             for feature in features:
 
                 feature_note = (
-                    self._resolve_link(
-                        feature
-                    )
+                    self._resolve_link(feature)
                 )
 
                 if not feature_note:
@@ -1998,9 +1895,7 @@ class DBViewPlugin(BasePlugin):
     ):
 
         headers = [
-            self._column_title(
-                column
-            )
+            self._column_title(column)
             for column in columns
         ]
 
@@ -2014,14 +1909,12 @@ class DBViewPlugin(BasePlugin):
 
             output.append("")
 
-        # Header
         output.append(
             "| "
             + " | ".join(headers)
             + " |"
         )
 
-        # Separator
         output.append(
             "| "
             + " | ".join(
@@ -2031,7 +1924,6 @@ class DBViewPlugin(BasePlugin):
             + " |"
         )
 
-        # Rows
         for row in rows:
 
             output.append(
@@ -2047,9 +1939,7 @@ class DBViewPlugin(BasePlugin):
 
         output.append("")
 
-        return "\n".join(
-            output
-        )
+        return "\n".join(output)
 
     def _column_title(
         self,
@@ -2058,17 +1948,13 @@ class DBViewPlugin(BasePlugin):
 
         column = str(column)
 
-        if column.startswith(
-            "formula."
-        ):
+        if column.startswith("formula."):
 
             column = column[
                 len("formula.") :
             ]
 
-        if column.startswith(
-            "note."
-        ):
+        if column.startswith("note."):
 
             column = column[
                 len("note.") :
@@ -2111,9 +1997,7 @@ class DBViewPlugin(BasePlugin):
         markdown,
     ):
 
-        if not markdown.startswith(
-            "---"
-        ):
+        if not markdown.startswith("---"):
             return {}
 
         lines = markdown.splitlines()
@@ -2139,21 +2023,14 @@ class DBViewPlugin(BasePlugin):
             return {}
 
         raw = "\n".join(
-            lines[
-                1:end
-            ]
+            lines[1:end]
         )
 
         try:
 
-            data = yaml.safe_load(
-                raw
-            )
+            data = yaml.safe_load(raw)
 
-            if isinstance(
-                data,
-                dict,
-            ):
+            if isinstance(data, dict):
                 return data
 
         except Exception as exc:
@@ -2180,25 +2057,17 @@ class DBViewPlugin(BasePlugin):
             [],
         )
 
-        if isinstance(
-            tags,
-            str,
-        ):
+        if isinstance(tags, str):
             tags = [tags]
 
-        if not isinstance(
-            tags,
-            list,
-        ):
+        if not isinstance(tags, list):
             return []
 
         result = []
 
         for tag in tags:
 
-            tag = str(
-                tag
-            ).strip()
+            tag = str(tag).strip()
 
             if tag.startswith("#"):
                 tag = tag[1:]
@@ -2221,17 +2090,12 @@ class DBViewPlugin(BasePlugin):
 
         value = note[
             "frontmatter"
-        ].get(
-            property_name
-        )
+        ].get(property_name)
 
         if value is None:
             return []
 
-        if isinstance(
-            value,
-            list,
-        ):
+        if isinstance(value, list):
             return value
 
         return [value]
@@ -2244,24 +2108,13 @@ class DBViewPlugin(BasePlugin):
         if value is None:
             return ""
 
-        # ----------------------------------------------------
-        # Lists
-        # ----------------------------------------------------
-
-        if isinstance(
-            value,
-            list,
-        ):
+        if isinstance(value, list):
 
             values = []
 
             for item in value:
 
-                resolved = (
-                    self._resolve_link(
-                        item
-                    )
-                )
+                resolved = self._resolve_link(item)
 
                 if resolved:
 
@@ -2277,27 +2130,13 @@ class DBViewPlugin(BasePlugin):
                         str(item)
                     )
 
-            return ", ".join(
-                values
-            )
+            return ", ".join(values)
 
-        # ----------------------------------------------------
-        # Obsidian wikilink
-        # ----------------------------------------------------
-
-        resolved = self._resolve_link(
-            value
-        )
+        resolved = self._resolve_link(value)
 
         if resolved:
 
-            return self._link_to_note(
-                resolved
-            )
-
-        # ----------------------------------------------------
-        # Plain value
-        # ----------------------------------------------------
+            return self._link_to_note(resolved)
 
         return str(value)
 
@@ -2310,29 +2149,18 @@ class DBViewPlugin(BasePlugin):
         value,
     ):
 
-        if not isinstance(
-            value,
-            str,
-        ):
+        if not isinstance(value, str):
             return None
 
-        match = WIKILINK_RE.search(
-            value
-        )
+        match = WIKILINK_RE.search(value)
 
         if not match:
             return None
 
-        name = match.group(
-            1
-        ).strip()
+        name = match.group(1).strip()
 
         if not name:
             return None
-
-        # ----------------------------------------------------
-        # Exact path lookup
-        # ----------------------------------------------------
 
         normalized_name = (
             name
@@ -2340,9 +2168,7 @@ class DBViewPlugin(BasePlugin):
             .strip("/")
         )
 
-        if normalized_name.lower().endswith(
-            ".md"
-        ):
+        if normalized_name.lower().endswith(".md"):
 
             key = (
                 self.docs_dir
@@ -2352,25 +2178,14 @@ class DBViewPlugin(BasePlugin):
             if key in self.notes:
                 return self.notes[key]
 
-        # ----------------------------------------------------
-        # Stem lookup
-        # ----------------------------------------------------
-
         key = name.lower()
 
         if key in self.notes:
             return self.notes[key]
 
-        # ----------------------------------------------------
-        # Search by note name
-        # ----------------------------------------------------
-
         for note in self.notes.values():
 
-            if (
-                note["name"].lower()
-                == name.lower()
-            ):
+            if note["name"].lower() == name.lower():
                 return note
 
         return None
@@ -2385,10 +2200,7 @@ class DBViewPlugin(BasePlugin):
 
         for note in self.notes.values():
 
-            if (
-                note["name"].lower()
-                == str(name).lower()
-            ):
+            if note["name"].lower() == str(name).lower():
                 return note
 
         return None
@@ -2407,7 +2219,6 @@ class DBViewPlugin(BasePlugin):
             .replace("\\", "/")
         )
 
-        # Remove .md.
         if relative.lower().endswith(".md"):
             relative = relative[:-3]
 
@@ -2421,17 +2232,7 @@ class DBViewPlugin(BasePlugin):
             for part in parts
         ]
 
-        path = "/".join(
-            encoded_parts
-        )
-
-        # ----------------------------------------------------
-        # MkDocs default:
-        #
-        # use_directory_urls: true
-        #
-        # foo.md -> /foo/
-        # ----------------------------------------------------
+        path = "/".join(encoded_parts)
 
         if self.use_directory_urls:
 
@@ -2441,30 +2242,19 @@ class DBViewPlugin(BasePlugin):
                 + "/"
             )
 
-            # index.md is the site's root.
             if relative.lower() == "index":
 
                 href = self.site_url_path
 
-            # A directory's index.md should resolve to
-            # that directory rather than /index/.
-            elif relative.lower().endswith(
-                "/index"
-            ):
+            elif relative.lower().endswith("/index"):
 
-                directory = path[
-                    :-len("/index")
-                ]
+                directory = path[:-len("/index")]
 
                 href = (
                     self.site_url_path
                     + directory
                     + "/"
                 )
-
-        # ----------------------------------------------------
-        # MkDocs with use_directory_urls: false
-        # ----------------------------------------------------
 
         else:
 
@@ -2473,44 +2263,6 @@ class DBViewPlugin(BasePlugin):
                 + path
                 + ".html"
             )
-
-        return (
-            f"[{self._escape_link_text(note['name'])}]"
-            f"({href})"
-        )
-
-
-        if not note:
-            return ""
-
-        relative = (
-            note["relative_path"]
-            .as_posix()
-        )
-
-        parts = relative.split("/")
-
-        encoded_parts = [
-            quote(
-                part,
-                safe=".-_()",
-            )
-            for part in parts
-        ]
-
-        href = (
-            "/"
-            + "/".join(
-                encoded_parts
-            )
-        )
-
-        href = re.sub(
-            r"\.md$",
-            ".html",
-            href,
-            flags=re.IGNORECASE,
-        )
 
         return (
             f"[{self._escape_link_text(note['name'])}]"
@@ -2555,10 +2307,7 @@ class DBViewPlugin(BasePlugin):
 
             seen.add(path)
 
-            if (
-                path
-                == target_note["path"]
-            ):
+            if path == target_note["path"]:
                 continue
 
             try:
@@ -2570,9 +2319,7 @@ class DBViewPlugin(BasePlugin):
             except Exception:
                 continue
 
-            for match in WIKILINK_RE.finditer(
-                text
-            ):
+            for match in WIKILINK_RE.finditer(text):
 
                 linked_name = (
                     match.group(1)
@@ -2582,9 +2329,7 @@ class DBViewPlugin(BasePlugin):
 
                 if linked_name == target_name:
 
-                    result.append(
-                        note
-                    )
+                    result.append(note)
 
                     break
 
@@ -2599,20 +2344,13 @@ class DBViewPlugin(BasePlugin):
         if current_file is None:
             return False
 
-        current_file = (
-            current_file.resolve()
-        )
+        current_file = current_file.resolve()
 
-        backlinks = self._find_backlinks(
-            note
-        )
+        backlinks = self._find_backlinks(note)
 
         for backlink in backlinks:
 
-            if (
-                backlink["path"].resolve()
-                == current_file
-            ):
+            if backlink["path"].resolve() == current_file:
                 return True
 
         return False
@@ -2627,15 +2365,10 @@ class DBViewPlugin(BasePlugin):
         wanted,
     ):
 
-        if isinstance(
-            values,
-            str,
-        ):
+        if isinstance(values, str):
             values = [values]
 
-        wanted = str(
-            wanted
-        ).strip().lower()
+        wanted = str(wanted).strip().lower()
 
         wanted_no_hash = (
             wanted[1:]
@@ -2645,9 +2378,7 @@ class DBViewPlugin(BasePlugin):
 
         for value in values:
 
-            value = str(
-                value
-            ).strip()
+            value = str(value).strip()
 
             value_no_hash = (
                 value[1:]
@@ -2656,29 +2387,20 @@ class DBViewPlugin(BasePlugin):
             )
 
             # Direct comparison.
-            if (
-                value.lower()
-                == wanted
-            ):
+            if value.lower() == wanted:
                 return True
 
             # Hash-insensitive comparison.
-            if (
-                value_no_hash.lower()
-                == wanted_no_hash
-            ):
+            if value_no_hash.lower() == wanted_no_hash:
                 return True
 
-            # Obsidian link comparison.
-            resolved = self._resolve_link(
-                value
-            )
+            # Obsidian wikilink comparison.
+            resolved = self._resolve_link(value)
 
             if resolved:
 
                 if (
-                    resolved["name"]
-                    .lower()
+                    resolved["name"].lower()
                     == wanted_no_hash
                 ):
                     return True
@@ -2691,8 +2413,7 @@ class DBViewPlugin(BasePlugin):
     ):
 
         return (
-            "(relay conflict "
-            in path.name
+            "(relay conflict " in path.name
         )
 
     def _is_trash(
@@ -2700,7 +2421,4 @@ class DBViewPlugin(BasePlugin):
         path,
     ):
 
-        return (
-            ".trash"
-            in path.parts
-        )
+        return ".trash" in path.parts

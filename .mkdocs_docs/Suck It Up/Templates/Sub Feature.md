@@ -1,13 +1,14 @@
 ---
 tags:
   - feature
-system family:
-parent features:
+parent features: "{{LINKCURRENT}}"
 priority: "[[Default]]"
 ---
 
 
 ### Needs:
-![[Suck It Up/Templates/Bases/Needs.base]]
+| Name | Teams | auto-status | ShowAssignedTask |
+| --- | --- | --- | --- |
+| No matching pages |  |  |  |
 
 

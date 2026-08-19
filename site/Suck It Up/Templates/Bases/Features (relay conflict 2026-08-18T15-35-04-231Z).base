@@ -1,0 +1,84 @@
+filters:
+  and:
+    - file.tags.contains("feature")
+    - '!file.name.contains("Template")'
+formulas:
+  Priority: link(status).asFile().properties.priority.tostring()
+  Status Priority Number: link(status).asFile().properties.priority
+  Feature Priority: link(formula.FirstFeature[0]).asFile().name.toString() + " |  " +  link(formula.FirstFeature[0]).asFile().properties.status.asFile().name.toString()
+  FirstFeature: |+
+    features.map(value.asFile().properties.priority + " | "  + value)
+      .sort()
+      .map(value.split(" | ")[1])
+
+  SortFeaturesByPriority: |-
+    features.map(value.asFile().properties.priority + " | "  + value)
+      .sort()
+      .map(value.split(" | ")[1])
+  GetTopParentFeature: asfdsad
+properties:
+  formula.Priority:
+    displayName: Status Priority
+  formula.FirstFeature:
+    displayName: SortedFeatures
+  formula.Feature Priority:
+    displayName: HighestPriorityFeature
+views:
+  - type: table
+    name: Systems
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Needs
+    filters:
+      and:
+        - file.tags.contains("needs")
+        - or:
+            - features.contains(this)
+            - this.inFolder("AllPages/Templates/Bases")
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: TeamPage
+    filters:
+      and:
+        - and:
+            - or:
+                - this.tags.contains(teampage)
+                - teams.contains(this)
+    groupBy:
+      property: formula.Feature Priority
+      direction: ASC
+    order:
+      - file.name
+      - teams
+      - features
+      - status
+    sort:
+      - property: formula.Status Priority Number
+        direction: DESC
+    columnSize:
+      formula.Priority: 94
+  - type: table
+    name: all
+    groupBy:
+      property: formula.Feature Priority
+      direction: ASC
+    order:
+      - file.name
+      - teams
+      - status
+      - features
+  - type: table
+    name: Categories
+    filters:
+      or:
+        - and:
+            - categories.contains(this)
+            - this.tags.contains("#category")
+    order:
+      - file.name
+      - categories
+      - formula.GetTopParentFeature

@@ -14,19 +14,28 @@ action QuickAdd: Add New Need
 ```
 
 ### Needs:
-![[Suck It Up/Templates/Bases/Needs.base]]
+| Name | Teams | auto-status | ShowAssignedTask |
+| --- | --- | --- | --- |
+| Magic Sounds | Tech, Art |  |  |
+| Cool Other Thing | Tech |  |  |
 
 
 
 ### Needs:
-![[Needs.base]]
+| Name | Teams | auto-status | ShowAssignedTask |
+| --- | --- | --- | --- |
+| Magic Sounds | Tech, Art |  |  |
+| Cool Other Thing | Tech |  |  |
 
 
 
 
 
 ### Needs:
-![[Needs.base]]
+| Name | Teams | auto-status | ShowAssignedTask |
+| --- | --- | --- | --- |
+| Magic Sounds | Tech, Art |  |  |
+| Cool Other Thing | Tech |  |  |
 
 
 

@@ -51,12 +51,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Suck It Up/00 Home/CurrentSprint.md",
+                "file": "Sprint 1.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CurrentSprint"
+              "title": "Sprint 1"
             }
           },
           {
@@ -280,28 +280,29 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false,
-      "evc-team-relay:Relay settings": false
+      "bases:Create new base": false
     }
   },
   "active": "048229b0d35c127c",
   "lastOpenFiles": [
+    "Suck It Up/00 Home/CurrentSprint.md",
+    "Sprint 1.md",
+    "Suck It Up/PagesFromTemplates/Priorities",
+    "Suck It Up/Agile/Tasks",
+    "Suck It Up/Agile/Sprints",
+    "Suck It Up/03 Agile/Tasks",
+    "Suck It Up/03 Agile/Sprints",
+    "Suck It Up/Test quickadd/SPeech bubble",
+    "Suck It Up/01 Team Pages",
+    "Suck It Up/Team Pages",
+    "Suck It Up/Templates/Team Pages",
+    "Suck It Up/Needs",
     "Suck It Up/00 Home/Start Here.md",
     "Suck It Up/00 Home/Hub.md",
     "Suck It Up/00 Home/Documentation Structure.md",
     "Suck It Up/04 PagesFromTemplates/Categories/TWE.md",
     "Suck It Up/04 PagesFromTemplates/Features/Fireball.md",
     "Suck It Up/04 PagesFromTemplates/Needs/Cool Other Thing (relay conflict 2026-08-18T14-36-07-124Z).md",
-    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T16-00-28-479Z).base",
-    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T16-00-20-508Z).base",
-    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T16-00-16-308Z).base",
-    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T16-00-15-166Z).base",
-    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T15-59-51-467Z).base",
-    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T15-59-46-582Z).base",
-    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T15-59-42-655Z).base",
-    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T15-59-37-099Z).base",
-    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T15-59-31-832Z).base",
-    "Suck It Up/Templates/Bases/Needs (relay conflict 2026-08-18T15-59-30-056Z).base",
     "Suck It Up/Templates 1/Bases/Sound.md",
     "Suck It Up/04 PagesFromTemplates/Needs/Fireball impact sound.md",
     "Suck It Up/01 Tech/Tech.md",
@@ -319,8 +320,6 @@
     "Suck It Up/Templates/Parent Feature.md",
     "Suck It Up/Templates/Team Page Template.md",
     "Suck It Up/Templates/Sub Feature.md",
-    "Suck It Up/Templates/Status Template.md",
-    "Suck It Up/Templates/Sprint Template.md",
-    "Suck It Up/Templates/Parent Feature (relay conflict 2026-08-18T15-08-53-555Z).md"
+    "Suck It Up/Templates/Status Template.md"
   ]
 }

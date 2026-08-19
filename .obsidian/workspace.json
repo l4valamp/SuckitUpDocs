@@ -11,13 +11,32 @@
             "id": "5f2b3bd2bb896e28",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "docs/Suck It Up/01 Tech/Tech.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Tech"
+            }
+          },
+          {
+            "id": "6933f8d8b83e66f8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "docs/Suck It Up/01 Tech/Tech.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Tech"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -184,8 +203,25 @@
       "bases:Create new base": false
     }
   },
-  "active": "5f2b3bd2bb896e28",
+  "active": "6933f8d8b83e66f8",
   "lastOpenFiles": [
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Testing new features with properties/index.html",
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Testing new features with properties",
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Testing new feature need/index.html",
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Testing new feature need",
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Test need/index.html",
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Test need",
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Smoke VFX/index.html",
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Smoke VFX",
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Projectile impact vfx/index.html",
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Projectile impact vfx",
+    "site/Suck It Up/04 PagesFromTemplates/Needs/Magic Sounds/index.html",
+    "site/assets/images/favicon.png",
+    "plugins/databaseview-plugin/README.md",
+    "plugins/entity-plugin/README.md",
+    "docs/Suck It Up/01 Tech/Tech.md",
+    "docs/Suck It Up/Templates/Parent Feature.md",
+    "docs/Suck It Up/00 Home/CurrentSprint.md",
     "Index.md"
   ]
 }

@@ -3,14 +3,18 @@ tags:
   - tech
   - teampage
 ---
-# Tech Team Page
+
 ## Current Tech Tasks
 
 ![[CurrentSprint]]
 
 
 ## Future Needs
-![[Suck It Up/Templates/Bases/Needs.base#TeamPage]]
+
+| Name | Teams | Feature Parent | auto-status |
+| --- | --- | --- | --- |
+| No matching pages |  |  |  |
+
 
 
 

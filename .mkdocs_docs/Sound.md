@@ -8,4 +8,6 @@ teams:
 
 
 ## Active Needs
-![[Suck It Up/Templates/Bases/Needs.base#TeamPage]]
+| Name | Teams | Feature Parent | auto-status |
+| --- | --- | --- | --- |
+| No matching pages |  |  |  |

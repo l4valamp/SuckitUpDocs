@@ -14,3 +14,19 @@ status: "[[Not Started]]"
 ---
 ### Needs
 ![[Needs.base]]
+---
+tags:
+  - task
+needs:
+  - "{{VALUE: needs | linklist}}"
+teams:
+  - "{{VALUE: [[Tech]], [[Art]], [[Design]], [[Sound]] | label: Team}}"
+sprint:
+  - "{{LINKCURRENT}}"
+story points: "{{VALUE: 1, 2, 3, 5,}}"
+priority: "{{Value: Default, High Priority | linklist}}"
+team members:
+status: "[[Not Started]]"
+---
+### Needs
+![[Needs.base]]

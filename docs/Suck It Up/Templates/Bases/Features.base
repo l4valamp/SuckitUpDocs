@@ -102,3 +102,10 @@ views:
     sort:
       - property: formula.GetTopParentFeature
         direction: ASC
+  - type: bases-html-view
+    name: TestHTML
+    order:
+      - file.name
+      - teams
+      - categories
+      - parent features
